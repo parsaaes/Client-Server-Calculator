@@ -4,27 +4,30 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Message implements Serializable {
-    private ArrayList<String> body = new ArrayList<>();
+    private static final long serialVersionUID = 8900674260590897679L;
+    private String rawBody;
 
     public Message(String rawBody) {
-        breakIntoLines(rawBody);
+        this.rawBody = rawBody;
     }
 
-    private void breakIntoLines(String rawBody) {
+    private ArrayList<String> breakIntoLines(String rawBody) {
+        ArrayList<String> body = new ArrayList<>();
         String[] lines = rawBody.split("\n");
         for (String line : lines) {
             body.add(line);
         }
+        return body;
     }
 
     public ArrayList<String> getBody() {
-        return body;
+        return breakIntoLines(rawBody);
     }
 
     @Override
     public String toString() {
         return "Message{" +
-                "body=" + body +
+                "body=" + rawBody +
                 '}';
     }
 }

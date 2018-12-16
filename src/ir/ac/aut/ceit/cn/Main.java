@@ -12,14 +12,11 @@ public class Main {
             Thread client = new Thread(new Client("127.0.0.1",12345));
             Thread server = new Thread(new Server(12345));
             server.start();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             client.start();
-
-//        Calculator calculator = new Calculator();
-//        System.out.println(calculator.cos(60));
-
-//        Parser parser = new Parser();
-//        Message message = new Message("pCalculation Request:\n$divide $ 2 $ 5.8998    $");
-//        System.out.println(parser.getExpression(message));
-
     }
 }
