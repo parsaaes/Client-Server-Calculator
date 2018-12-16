@@ -3,6 +3,7 @@ package ir.ac.aut.ceit.cn.Network;
 import ir.ac.aut.ceit.cn.Protocol.Message;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -18,15 +19,11 @@ public class Client extends NetworkPeer implements Runnable {
     }
 
     public void run() {
-        BufferedReader br;
-        BufferedWriter bw;
         ObjectOutputStream objectOutputStream;
         ObjectInputStream objectInputStream;
         Scanner sc;
         try {
             socket = new Socket(ip, port);
-//            bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectInputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -34,15 +31,15 @@ public class Client extends NetworkPeer implements Runnable {
             while(true) {
                 printLog("enter:");
                 String output = sc.nextLine();
-                // sendString(output, bw);
-                objectOutputStream.writeObject(new Message());
+                objectOutputStream.writeObject(new Message("Calculation Request:\n" + output));
                 Message input = (Message) objectInputStream.readObject();
-                printLog("got: " + input);
+                printLog("got: " + input.getBody().get(0));
+                printLog("got: " + input.getBody().get(1));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("no IO detected :( maybe there is no server waiting for me :'(");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("class casting problem :-?");
         }
     }
 
